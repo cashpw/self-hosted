@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  ghost:
+    env_file: ./ghost/.env
+    image: ghost:3-alpine
+    ports: 
+      - 3001:2368
+    restart: always
+    volumes:
+      - ghost_data:/var/lib/ghost/content:z
+
+volumes:
+  ghost_data: 
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
