@@ -1,0 +1,3 @@
+[submodule "monica/monica/monica"]
+	path = monica/monica/monica
+	url = https://github.com/monicahq/monica.git
