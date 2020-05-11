@@ -2,80 +2,70 @@ version: '3.7'
 
 services:
   monica:
-    image: monicahq/monicahq:fpm
-    #depends_on: 
-      #- monica_cron
-      #- monica_db
-      #- monica_queue
+    depends_on:
+      - db
     env_file: 
-      - ./monica/.env
+      - ./monica/.env 
       - ./monica/.env-secrets
-    #ports: 
-      #- 3000:9000
+    image: monicahq/monicahq:fpm
     restart: always
     volumes: 
-      - monica_vol_data:/var/www/monica/storage
-      - monica_vol_www:/var/www/monica
+      - vol-data:/var/www/monica/storage 
+      - vol-www:/var/www/monica
 
-  monica_cron:
-    image: monicahq/monicahq:fpm
-    depends_on: 
-      - monica_db
-    env_file: 
-      - ./monica/.env
-      - ./monica/.env-secrets
+  cron:
     command: cron.sh
-    #ports: 
-      #- 3000:9000
-    restart: always
-    volumes: 
-      - monica_vol_data:/var/www/monica/storage
-      - monica_vol_www:/var/www/monica:ro
-
-  monica_queue:
-    image: monicahq/monicahq:fpm
     depends_on: 
-      - monica_db
+      - db
     env_file: 
       - ./monica/.env
       - ./monica/.env-secrets
-    command: queue.sh
-    #ports: 
-      #- 3000:9000
+    image: monicahq/monicahq:fpm
     restart: always
     volumes: 
-      - monica_vol_data:/var/www/monica/storage
-      - monica_vol_www:/var/www/monica:ro
+      - vol-data:/var/www/monica/storage
+      - vol-www:/var/www/monica:ro
 
-  monica_db:
+  queue:
+    command: queue.sh
+    depends_on: 
+      - db
+    env_file: 
+      - ./monica/.env
+      - ./monica/.env-secrets
+    image: monicahq/monicahq:fpm
+    restart: always
+    volumes: 
+      - vol-data:/var/www/monica/storage
+      - vol-www:/var/www/monica:ro
+
+  db:
     env_file:
-      - ./monica_db/.env
-      - ./monica_db/.env-secrets
+      - ./db/.env
+      - ./db/.env-secrets
     image: mysql:5.7
     restart: always
     volumes: 
-      - monica-vol-db:/var/lib/mysql
+      - vol-mysql:/var/lib/mysql
 
-  monica_web:
-    build: ./monica_web
-    restart: always
+  web:
+    build: ./web
     depends_on:
       - monica
-    environment:
-      - VIRTUAL_HOST=monica.cashweaver.com
-      - LETSENCRYPT_HOST=monica.cashweaver.com
-      - LETSENCRYPT_EMAIL=cashbweaver@gmail.com
+    env_file:
+      - ./web/.env
+    restart: always
     volumes:
-      - monica_vol_data:/var/www/monica/storage:ro
-      - monica_vol_www:/var/www/monica:ro
+      - vol-data:/var/www/monica/storage:ro
+      - vol-www:/var/www/monica:ro
 
 volumes:
-  monica_vol_data: 
-    name: monica_vol_data
-  monica_vol_www: 
-    name: monica_vol_www
-  monica-vol-db:
-    name: monica-vol-db
+  vol-data: 
+    name: vol-data
+  vol-www: 
+    name: vol-www
+  vol-mysql:
+    name: vol-mysql
 
 networks:
   default:
