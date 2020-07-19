@@ -7,7 +7,8 @@ services:
     env_file: 
       - ./monica/.env 
       - ./monica/.env-secrets
-    image: monicalocal:latest
+    #image: monicalocal:latest
+    image: monicahq/monicahq:v2.18.0-fpm
     restart: always
     volumes: 
       - vol-data:/var/www/monica/storage 
@@ -16,11 +17,12 @@ services:
   cron:
     command: cron.sh
     depends_on: 
+      - monica
       - db
     env_file: 
       - ./monica/.env
       - ./monica/.env-secrets
-    image: monicahq/monicahq:fpm
+    image: monicahq/monicahq:v2.18.0-fpm
     restart: always
     volumes: 
       - vol-data:/var/www/monica/storage
@@ -29,11 +31,12 @@ services:
   queue:
     command: queue.sh
     depends_on: 
+      - monica
       - db
     env_file: 
       - ./monica/.env
       - ./monica/.env-secrets
-    image: monicahq/monicahq:fpm
+    image: monicahq/monicahq:v2.18.0-fpm
     restart: always
     volumes: 
       - vol-data:/var/www/monica/storage
