@@ -8,40 +8,10 @@ services:
     env_file: 
       - ./monica/.env 
       - ./monica/.env-secrets
-    #image: monicalocal:latest
-    #image: monicahq/monicahq:v2.18.0-fpm
     restart: always
     volumes: 
       - vol-data:/var/www/monica/storage 
       - vol-www:/var/www/monica
-
-  #cron:
-    #command: cron.sh
-    #depends_on: 
-      #- monica
-      #- db
-    #env_file: 
-      #- ./monica/.env
-      #- ./monica/.env-secrets
-    #image: monicahq/monicahq:v2.18.0-fpm
-    #restart: always
-    #volumes: 
-      #- vol-data:/var/www/monica/storage
-      #- vol-www:/var/www/monica:ro
-
-  #queue:
-    #command: queue.sh
-    #depends_on: 
-      #- monica
-      #- db
-    #env_file: 
-      #- ./monica/.env
-      #- ./monica/.env-secrets
-    #image: monicahq/monicahq:v2.18.0-fpm
-    #restart: always
-    #volumes: 
-      #- vol-data:/var/www/monica/storage
-      #- vol-www:/var/www/monica:ro
 
   db:
     env_file:
