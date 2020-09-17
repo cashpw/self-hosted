@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  url-to-pdf-api:
+    #image: anthonylau/url-to-pdf-api
+    env_file:
+      - build/.env
+      - build/.env-secrets
+    build: ./build
+    #ports:
+      #- "9000:9000"
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
