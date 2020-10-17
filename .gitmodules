@@ -1,3 +1,6 @@
 [submodule "monica/monica/monica"]
 	path = monica/monica/monica
 	url = https://github.com/monicahq/monica.git
+[submodule "monica/docker"]
+	path = monica/docker
+	url = https://github.com/monicahq/docker.git
