@@ -1,0 +1,67 @@
+# Run Monica with Let's Encrypt certificate
+#
+# You might want to set these variables in you .env file:
+#
+#- APP_ENV=production
+#- APP_URL with your domain (https scheme)
+#
+#- DB_HOST=db
+# See `db` container for these values:
+#- DB_DATABASE=monica
+#- DB_USERNAME=homestead
+#- DB_PASSWORD=secret
+#
+# To use redis:
+#- REDIS_HOST=redis
+#- CACHE_DRIVER=redis
+#- QUEUE_CONNECTION=redis
+#
+
+version: "3.4"
+
+services:
+  app:
+    build: ./app
+    image: monica-app
+    env_file: 
+      - ./app/.env
+      - ./app/.env-secrets
+    volumes:
+      - data:/var/www/html/storage
+    restart: always
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: mysql:5.7
+    env_file:
+      - ./db/.env
+      - ./db/.env-secrets
+    volumes:
+      - mysql:/var/lib/mysql
+    restart: always
+
+  redis:
+    image: redis:alpine
+    restart: always
+
+  web:
+    build: ./web
+    image: monica-web
+    restart: always
+    env_file:
+      - ./web/.env
+    volumes:
+      - data:/var/www/html/storage:ro
+    depends_on:
+      - app
+
+volumes:
+  data:
+  mysql:
+
+networks:
+  default:
+    external:
+      name: nginx-proxy

@@ -34,6 +34,7 @@ RUN git clone https://github.com/cashweaver/url-to-pdf-api pdf-rendering-srv
 WORKDIR $APP_HOME
 COPY --chown=app:app router.js src/router.js
 COPY --chown=app:app render-http.js src/http/render-http.js
+COPY --chown=app:app render-core.js src/core/render-core.js
 RUN npm install --only=prod
 
 HEALTHCHECK CMD curl -I http://localhost:9000/

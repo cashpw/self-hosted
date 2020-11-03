@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  anki-sync-server:
+    image: kuklinistvan/anki-sync-server:latest
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - "27701:27701"
+    volumes:
+      - ./data:/app/data
+      #- vol-data:/app/data
+
+#volumes:
+  #vol-data: 
+    #name: vol-data
+
+networks:
+  default:
+    external:
+      name: nginx-proxy

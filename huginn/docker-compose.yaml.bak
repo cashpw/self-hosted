@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  huginn:
+    image: huginn/huginn
+    depends_on:
+      - db
+    env_file: 
+      - ./huginn/.env 
+      - ./huginn/.env-secrets
+    restart: always
+    links:
+      - db
+
+  db:
+    env_file:
+      - ./db/.env
+      - ./db/.env-secrets
+    image: mysql:5.7
+    restart: always
+    volumes: 
+      - vol-huginn-mysql:/var/lib/mysql
+
+volumes:
+  vol-huginn-mysql:
+    name: vol-huginn-mysql
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
