@@ -6,7 +6,6 @@ services=(
   "anki-sync-server"
   "monica"
   "nginx-proxy"
-  "url-to-pdf-api"
 )
 
 cd "${DIR}"
